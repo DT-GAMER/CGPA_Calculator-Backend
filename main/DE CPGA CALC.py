@@ -70,6 +70,7 @@ def calculate_cgpa(level, sem, prev_cgpa, gpa):
 
             cgpa = (prev_cgpa * 9 + gpa)/10
             
+    return round(cgpa, 2)
 
 def display_table(course_codes, course_units, grades):
     """
@@ -139,7 +140,7 @@ print("===========================")
 for i in range(course_num):
     while True:
         try:
-            course_code = input("Course code for course {}: ".format(i+1))
+            course_code = input("Course code for course {}: ".format(i+1)).upper()
             course_unit = int(input("Course unit for course {}: ".format(i+1)))
             course_grade = input("Grade for course {}: ".format(i+1)).upper()
             if course_unit < 1 or course_unit > 6:
