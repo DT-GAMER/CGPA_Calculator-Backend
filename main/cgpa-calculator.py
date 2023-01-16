@@ -72,7 +72,7 @@ def generate_result(course_codes, cu, grades, level, sem, prev_cgpa):
 while True:
     try:
         level = int(input("Level: "))
-        if level < 100 or level > 600 or level not in (100, 200, 300, 400, 500, 600):
+        if not(100 <= Level <= 600):
             raise ValueError("Invalid input. Please enter a level between 100 - 600.")
         break
     except ValueError as e:
@@ -82,7 +82,7 @@ while True:
 while True:
     try:
         sem = int(input("Semester: "))
-        if sem > 2 or sem < 1:
+        if Sem not in [1, 2]:
             raise ValueError("Invalid input. Please enter a valid semester between 1 and 2.")
         break
     except ValueError as e:
@@ -91,6 +91,7 @@ while True:
 while True:             
     try:
         prev_cgpa = float(input("Current CGPA: "))
+        if not(0.00 <= prev_cgpa >= 5.00):
         break
     except ValueError:
         print("Invalid input. Please enter a valid number.")
@@ -101,6 +102,7 @@ print("===========================")
 while True:
     try:
         course_num = int(input("Courses Attempted: "))
+
         break
     except ValueError:
         print("Invalid input. Please enter a valid number.")
@@ -121,9 +123,12 @@ for i in range(course_num):
             course_code = input("Course code for course {}: ".format(i+1))
             course_unit = int(input("Course unit for course {}: ".format(i+1)))
             course_grade = input("Grade for course {}: ".format(i+1))
-            if course_unit < 1 or course_unit > 6:
-                raise ValueError("Invalid input. Please enter a valid course unit between 1 and 6.")
-            if course_grade not in ['A', 'B', 'C', 'D', 'E', 'F']:
+            enter a valid semester between 1 - 2."})
+
+            if not all(0 < c <= 6 for c in course_unit):
+                raise ValueError("Invalid input. Please enter a valid course unit between 1 - 6.")
+            
+            if not all(g in ['A', 'B', 'C', 'D', 'E', 'F'] for g in course_grades):
                 raise ValueError("Invalid input. Please enter a valid grade between A and F.")
             break
         except ValueError as e:
