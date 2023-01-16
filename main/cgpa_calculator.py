@@ -176,7 +176,7 @@ for i in range(course_num):
         try:
             course_code = input("Course code for course {}: ".format(i+1))
             course_unit = int(input("Course unit for course {}: ".format(i+1)))
-            course_grade = input("Grade for course {}: ".format(i+1))
+            course_grade = input("Grade for course {}: ".format(i+1)).upper()
             if course_unit < 1 or course_unit > 6:
                 raise ValueError("Invalid input. Please enter a valid course unit between 1 and 6.")
             if course_grade not in ['A', 'B', 'C', 'D', 'E', 'F']:
