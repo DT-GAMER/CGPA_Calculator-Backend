@@ -12,42 +12,73 @@ def calculate_gpa(course_units, grades):
     return round(gpa, 2)
 
 def calculate_cgpa(level, sem, prev_cgpa, gpa):
+
     """
     Calculate the CGPA given the level, semester, previous CGPA, and current GPA.
     """
+
     cgpa = prev_cgpa #initialize cgpa to the previous cgpa
+
     if level == 100:
+
         if sem == 1:
+
             cgpa = 0
+
         elif sem == 2:
+
             cgpa = (prev_cgpa + gpa) / 2
-    elif sem == 2:
-            cgpa = (prev_cgpa + gpa) / 2
+
     elif level == 200:
-            if sem == 1:
-                cgpa = (prev_cgpa * 2 + gpa) / 3
-    elif sem == 2:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 2 + gpa) / 3
+
+        elif sem == 2:
+
             cgpa = (prev_cgpa * 3 + gpa) / 4
+
     elif level == 300:
-            if sem == 1:
-                cgpa = (prev_cgpa * 4 + gpa)/5
-    elif sem == 2:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 4 + gpa)/5
+
+        elif sem == 2:
+
             cgpa = (prev_cgpa * 5 + gpa)/6
+
     elif level == 400:
-            if  sem == 1:
-                cgpa = (prev_cgpa * 6 + gpa)/7
-    elif sem == 2:
+
+        if  sem == 1:
+
+            cgpa = (prev_cgpa * 6 + gpa)/7
+
+        elif sem == 2:
+
             cgpa = (prev_cgpa * 7 + gpa)/8
+
     elif level == 500:
-            if sem == 1:
-                cgpa = (prev_cgpa * 8 + gpa)/9
-    elif sem == 2:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 8 + gpa)/9
+
+        elif sem == 2:
+
             cgpa = (prev_cgpa * 9 + gpa)/10
+
     elif level == 600:
-            if sem == 1:
-                cgpa = (prev_cgpa * 10 + gpa)/11
-    elif sem == 2:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 10 + gpa)/11
+
+        elif sem == 2:
+
             cgpa = (prev_cgpa * 11 + gpa)/12
+
     return round(cgpa, 2)
 
 def display_table(course_codes, course_units, grades):
