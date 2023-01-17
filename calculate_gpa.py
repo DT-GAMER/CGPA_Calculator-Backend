@@ -79,10 +79,10 @@ def calculate_cgpa_de(level, sem, prev_cgpa, gpa):
         elif sem == 2:
             cgpa = (prev_cgpa * 9 + gpa)/10            
     return round(cgpa, 2)
-    
+
 def generate_result(course_codes, course_units, grades, level, sem, prev_cgpa):
     """
-    Generate the student's result
+    Generate the student's result and display it in a table.
     """
     gpa = calculate_gpa(course_units, grades)
     print("GPA: ", gpa)
@@ -178,3 +178,7 @@ for i in range(course_num):
 # convert grades to numerical equivalents
 grades = [5.0 if grade == 'A' else 4.0 if grade == 'B' else 3.0 if grade == 'C' else 2.0 if grade == 'D' else 1.0 if grade == 'E' else 0.0 if grade == 'F' else None for grade in grades]
 
+print("===========================")
+
+# generate student's result
+generate_result(course_codes, cu, grades, level, sem, prev_cgpa)
