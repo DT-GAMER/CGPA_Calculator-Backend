@@ -230,6 +230,13 @@ def generate_result():
 def application_great():
     return 'This application is great!'
 
+@app.route('/add_names')
+def add_names():
+    first_name = request.args.get('first_name')
+    last_name = request.args.get('last_name')
+    full_name = first_name + " " + last_name
+    return full_name
+
 if __name__ == '__main__':
 
     app.run(debug=True)
