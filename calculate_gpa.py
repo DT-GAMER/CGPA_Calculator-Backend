@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 def calculate_gpa(course_units, grades):
     """
     Calculate the GPA given the course units and grades.
