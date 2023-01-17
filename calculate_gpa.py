@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import numpy as np
 
 def calculate_gpa(course_units, grades):
     """
