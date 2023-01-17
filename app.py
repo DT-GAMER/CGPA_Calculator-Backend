@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.after_request
 def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 @app.route('/calculate_gpa', methods=['POST'])
@@ -225,6 +225,10 @@ def generate_result():
     }
 
     return jsonify(result)
+
+@app.route('/')
+def application_great():
+    return 'This application is great!'
 
 if __name__ == '__main__':
 
