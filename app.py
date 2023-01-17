@@ -1,6 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 
 app = Flask(__name__)
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+    return response
 
 @app.route('/calculate_gpa', methods=['POST'])
 
