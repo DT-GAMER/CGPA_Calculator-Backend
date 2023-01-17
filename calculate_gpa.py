@@ -183,4 +183,4 @@ grades = [5.0 if grade == 'A' else 4.0 if grade == 'B' else 3.0 if grade == 'C' 
 print("===========================")
 
 # generate student's result
-generate_result(course_codes, cu, grades, level, sem, prev_cgpa)
+generate_result(admission_mode, course_codes, cu, grades, level, sem, prev_cgpa)
