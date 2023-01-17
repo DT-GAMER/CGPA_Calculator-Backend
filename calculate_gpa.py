@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import pandas as pd
+from tabulate import tabulate
 import numpy as np
 
 def calculate_gpa(course_units, grades):
@@ -87,9 +87,8 @@ def display_table(course_codes, course_units, grades):
     Display a table of the course codes, course units, and grades.
     """
     data = list(zip(course_codes, course_units, grades))
-    df = pd.DataFrame(data, columns=['Course Code', 'Course Unit', 'Grade'])
-    df.index = df.index + 1
-    return df
+    table = tabulate(data, headers=["Course Code", "Course Units", "Grades"], tablefmt="fancy_grid")
+    print(table)
 
 def generate_result(course_codes, course_units, grades, level, sem, prev_cgpa):
     """
