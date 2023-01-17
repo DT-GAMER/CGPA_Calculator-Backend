@@ -1,53 +1,227 @@
 from flask import Flask, request, jsonify
 
-from calculate_gpa import calculate_gpa, calculate_cgpa_utme, calculate_cgpa_de
-
 app = Flask(__name__)
 
 @app.route('/calculate_gpa', methods=['POST'])
 
-def calculate_gpa_route():
+def calculate_gpa():
 
-    course_units = request.json['course_units']
+    """
 
-    grades = request.json['grades']
+    Calculate the GPA given the course units and grades.
 
-    gpa = calculate_gpa(course_units, grades)
+    """
 
-    return jsonify(gpa=gpa)
+    data = request.get_json()
+
+    course_units = data['course_units']
+
+    grades = data['grades']
+
+    total_cu = sum(course_units)
+
+    weighted_points = 0
+
+    for i in range(len(course_units)):
+
+        weighted_points += course_units[i] * grades[i]
+
+    gpa = weighted_points / total_cu
+
+    return jsonify({'gpa': round(gpa, 2)})
 
 @app.route('/calculate_cgpa_utme', methods=['POST'])
 
-def calculate_cgpa_utme_route():
+def calculate_cgpa_utme():
 
-    level = request.json['level']
+    data = request.get_json()
 
-    sem = request.json['sem']
+    level = data['level']
 
-    prev_cgpa = request.json['prev_cgpa']
+    sem = data['sem']
 
-    gpa = request.json['gpa']
+    prev_cgpa = data['prev_cgpa']
 
-    cgpa = calculate_cgpa_utme(level, sem, prev_cgpa, gpa)
+    gpa = data['gpa']
 
-    return jsonify(cgpa=cgpa)
+    cgpa = prev_cgpa #initialize cgpa to the previous cgpa
+
+    if level == 100:
+
+        if sem == 1:
+
+            cgpa = 0
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa + gpa) / 2
+
+    elif level == 200:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 2 + gpa) / 3
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 3 + gpa) / 4
+
+    elif level == 300:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 4 + gpa)/5
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 5 + gpa)/6
+
+    elif level == 400:
+
+        if  sem == 1:
+
+            cgpa = (prev_cgpa * 6 + gpa)/7
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 7 + gpa)/8
+
+    elif level == 500:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 8 + gpa)/9
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 9 + gpa)/10
+
+    elif level == 600:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 10 + gpa)/11
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 11 + gpa)/12
+
+    return jsonify({'cgpa': round(cgpa, 2)})
 
 @app.route('/calculate_cgpa_de', methods=['POST'])
+def calculate_cgpa_de():
 
-def calculate_cgpa_de_route():
+    data = request.get_json()
 
-    level = request.json['level']
+    level = data['level']
 
-    sem = request.json['sem']
+    sem = data['sem']
 
-    prev_cgpa = request.json['prev_cgpa']
+    prev_cgpa = data['prev_cgpa']
 
-    gpa = request.json['gpa']
+    gpa = data['gpa']
 
-    cgpa = calculate_cgpa_de(level, sem, prev_cgpa, gpa)
+    cgpa = prev_cgpa #initialize current cgpa to previous cgpa
 
-    return jsonify(cgpa=cgpa)
+    if level == 200:
+
+        if sem == 1:
+
+            cgpa = 0
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa + gpa) / 2
+
+    elif level == 300:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 2 + gpa) / 3
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 3 + gpa) / 4
+
+    elif level == 400:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 4 + gpa)/5
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 5 + gpa)/6
+
+    elif level == 500:
+
+        if  sem == 1:
+
+            cgpa = (prev_cgpa * 6 + gpa)/7
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 7 + gpa)/8
+
+    elif level == 600:
+
+        if sem == 1:
+
+            cgpa = (prev_cgpa * 8 + gpa)/9
+
+        elif sem == 2:
+
+            cgpa = (prev_cgpa * 9 + gpa)/10            
+
+    return jsonify({'cgpa': round(cgpa, 2)})
+
+@app.route('/generate_result', methods=['POST'])
+
+def generate_result():
+
+    data = request.get_json()
+
+    admission_mode = data['admission_mode']
+
+    course_codes = data['course_codes']
+
+    course_units = data['course_units']
+
+    grades = data['grades']
+
+    level = data['level']
+
+    sem = data['sem']
+
+    prev_cgpa = data['prev_cgpa']
+
+    gpa = calculate_gpa(course_units, grades)
+
+    if admission_mode == 'UTME':
+
+        cgpa = calculate_cgpa_utme(level, sem, prev_cgpa, gpa)
+
+    else:
+
+        cgpa = calculate_cgpa_de(level, sem, prev_cgpa, gpa)
+
+    result = {
+
+        'Course Codes': course_codes,
+
+        'Course Units': course_units,
+
+        'Grades': grades,
+
+        'GPA': gpa,
+
+        'CGPA': cgpa
+
+    }
+
+    return jsonify(result)
 
 if __name__ == '__main__':
 
     app.run(debug=True)
+
