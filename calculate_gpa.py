@@ -82,7 +82,7 @@ def calculate_cgpa_de(level, sem, prev_cgpa, gpa):
             cgpa = (prev_cgpa * 9 + gpa)/10            
     return round(cgpa, 2)
 
-def generate_result(course_codes, course_units, grades, level, sem, prev_cgpa):
+def generate_result(admission_mode, course_codes, course_units, grades, level, sem, prev_cgpa):
     """
     Generate the student's result and display it in a table.
     """
@@ -98,7 +98,7 @@ def generate_result(course_codes, course_units, grades, level, sem, prev_cgpa):
 	 
 # Acquire Student admission mode 
 try:
-	 admission_mode = input("'UTME or DE': ").upper()
+	 admission_mode = input("'UTME or DE': ")
 	 if admission_mode not in ['UTME', 'DE']:
 	 	 raise ValueError("Invalid Input. Input one of 'UTME' or 'DE'")
 except ValueError as e:
