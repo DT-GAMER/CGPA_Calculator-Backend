@@ -5,7 +5,9 @@ def calculate_gpa(course_units, grades):
     Calculate the GPA given the course units and grades.
     """
     total_cu = sum(course_units)
-    weighted_points = np.dot(course_units, grades)
+    weighted_points = 0
+    for i in range(len(course_units)):
+        weighted_points += course_units[i] * grades[i]
     gpa = weighted_points / total_cu
     return round(gpa, 2)
 
