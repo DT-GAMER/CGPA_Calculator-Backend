@@ -1,17 +1,15 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-app = CORS(app, resources={r'*': {'origins': '*'}})
-
+CORS(app)
 
 @app.route('/calculate_gpa', methods=['POST'])
+@cross_origin()
 def calculate_gpa():
 
     """
-
     Calculate the GPA given the course units and grades.
-
     """
 
     data = request.get_json()
@@ -19,7 +17,8 @@ def calculate_gpa():
     course_units = data['course_units']
 
     grades = data['grades']
-
+    if not all(0.00<=i<=5.00 for i in grades):
+        return jsonify({'error': 'Invalid grade value'})
     total_cu = sum(course_units)
 
     weighted_points = 0
@@ -33,7 +32,9 @@ def calculate_gpa():
     return jsonify({'gpa': round(gpa, 2)})
 
 
+
 @app.route('/calculate_cgpa_utme', methods=['POST'])
+@cross_origin()
 def calculate_cgpa_utme():
 
     data = request.get_json()
@@ -111,6 +112,7 @@ def calculate_cgpa_utme():
     return jsonify({'cgpa': round(cgpa, 2)})
 
 @app.route('/calculate_cgpa_de', methods=['POST'])
+@cross_origin()
 def calculate_cgpa_de():
 
     data = request.get_json()
@@ -178,7 +180,7 @@ def calculate_cgpa_de():
     return jsonify({'cgpa': round(cgpa, 2)})
 
 @app.route('/generate_result', methods=['POST'])
-
+@cross_origin()
 def generate_result():
 
     data = request.get_json()
