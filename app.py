@@ -4,8 +4,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 app = CORS(app, resources={r'*': {'origins': '*'}})
 
-@app.route('/calculate_gpa', methods=['POST'])
 
+@app.route('/calculate_gpa', methods=['POST'])
 def calculate_gpa():
 
     """
@@ -32,8 +32,8 @@ def calculate_gpa():
 
     return jsonify({'gpa': round(gpa, 2)})
 
-@app.route('/calculate_cgpa_utme', methods=['POST'])
 
+@app.route('/calculate_cgpa_utme', methods=['POST'])
 def calculate_cgpa_utme():
 
     data = request.get_json()
