@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/calculate_gpa', methods=['POST'])
 @cross_origin()
 def calculate_gpa():
@@ -32,7 +33,6 @@ def calculate_gpa():
     return jsonify({'gpa': round(gpa, 2)})
 
 
-
 @app.route('/calculate_cgpa_utme', methods=['POST'])
 @cross_origin()
 def calculate_cgpa_utme():
@@ -45,7 +45,7 @@ def calculate_cgpa_utme():
 
     prev_cgpa = data['prev_cgpa']
 
-    gpa = data['gpa']
+    gpa = data['gpa']['gpa']
 
     cgpa = prev_cgpa #initialize cgpa to the previous cgpa
 
@@ -96,88 +96,57 @@ def calculate_cgpa_utme():
             cgpa = (prev_cgpa * 8 + gpa)/9
 
         elif sem == 2:
+        cgpa = (prev_cgpa * 9 + gpa)/10
 
-            cgpa = (prev_cgpa * 9 + gpa)/10
+elif level == 600:
 
-    elif level == 600:
+    if sem == 1:
 
-        if sem == 1:
+        cgpa = (prev_cgpa * 10 + gpa)/11
 
-            cgpa = (prev_cgpa * 10 + gpa)/11
+    elif sem == 2:
 
-        elif sem == 2:
+        cgpa = (prev_cgpa * 11 + gpa)/12
 
-            cgpa = (prev_cgpa * 11 + gpa)/12
+return jsonify({'cgpa': round(cgpa, 2)})
 
-    return jsonify({'cgpa': round(cgpa, 2)})
 
 @app.route('/calculate_cgpa_de', methods=['POST'])
 @cross_origin()
 def calculate_cgpa_de():
-
     data = request.get_json()
-
     level = data['level']
-
     sem = data['sem']
-
     prev_cgpa = data['prev_cgpa']
-
     gpa = data['gpa']
-
     cgpa = prev_cgpa #initialize current cgpa to previous cgpa
-
     if level == 200:
-
         if sem == 1:
-
             cgpa = 0
-
         elif sem == 2:
-
             cgpa = (prev_cgpa + gpa) / 2
-
     elif level == 300:
-
         if sem == 1:
-
             cgpa = (prev_cgpa * 2 + gpa) / 3
-
         elif sem == 2:
-
             cgpa = (prev_cgpa * 3 + gpa) / 4
-
     elif level == 400:
-
         if sem == 1:
-
             cgpa = (prev_cgpa * 4 + gpa)/5
-
         elif sem == 2:
-
             cgpa = (prev_cgpa * 5 + gpa)/6
-
     elif level == 500:
-
-        if  sem == 1:
-
-            cgpa = (prev_cgpa * 6 + gpa)/7
-
-        elif sem == 2:
-
-            cgpa = (prev_cgpa * 7 + gpa)/8
-
-    elif level == 600:
-
         if sem == 1:
-
-            cgpa = (prev_cgpa * 8 + gpa)/9
-
+            cgpa = (prev_cgpa * 6 + gpa)/7
         elif sem == 2:
-
-            cgpa = (prev_cgpa * 9 + gpa)/10            
-
+            cgpa = (prev_cgpa * 7 + gpa)/8
+    elif level == 600:
+        if sem == 1:
+            cgpa = (prev_cgpa * 8 + gpa)/9
+        elif sem == 2:
+            cgpa = (prev_cgpa * 9 + gpa)/10
     return jsonify({'cgpa': round(cgpa, 2)})
+
 
 @app.route('/generate_result', methods=['POST'])
 @cross_origin()
