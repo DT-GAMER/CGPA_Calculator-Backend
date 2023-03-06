@@ -1,21 +1,21 @@
 {
-    "name": "CGPA_calculator-",
-    "version": "1.0.0",
-    "description": "A CGPA Calculator",
-    "scripts": {
-        "build": "echo \"No build specified\" && exit 1",
-        "test": "echo \"No test specified\" && exit 1",
-        "start": "node index.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/DT-GAMER/CGPA_calculator-.git"
-    },
-    "author": "DT-GAMER",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/DT-GAMER/CGPA_calculator-/issues"
-    },
-    "homepage": "https://github.com/DT-GAMER/CGPA_calculator-#readme"
+  "name": "CGPA_calculator",
+  "version": "1.0.0",
+  "description": "A GPA calculator app",
+  "main": "app.py",
+  "scripts": {
+    "start": "python app.py",
+    "build": "echo 'python cgpa_calculator.py'",
+  },
+  "dependencies": {
+    "flask": "^2.2.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "GPA",
+    "calculator",
+    "grades"
+  ],
+  "author": "DT-GAMER",
+  "license": "MIT"
 }
-
