@@ -8,9 +8,7 @@
     "build": "echo 'python calculate_cgpa.py'"
   },
   "dependencies": {
-    "flask": "*",
-    "flask_cors": "*",
-    "gunicorn": "*"
+    "flask": "*"
   },
   "devDependencies": {},
   "keywords": [
