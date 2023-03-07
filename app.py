@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-start_app = Flask(__name__)
-CORS(start_app)
+app = Flask(__name__)
+CORS(app)
 
 
 def calculate_gpa(course_units, grades):
