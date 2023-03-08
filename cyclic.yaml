@@ -1,4 +1,0 @@
-#cyclic.yaml
-    
-    build:
-  command: npm run build
