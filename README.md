@@ -4,6 +4,9 @@ The CGPA calculator is a simple web application that allows students to calculat
 
 To use the CGPA calculator, simply go to https://cgpa-calc-rho.vercel.app/ and enter your grades for each course and the corresponding credit load. The calculator will then compute your CGPA for the given semester.
 
+## Frontend Repository
+https://github.com/DT-GAMER/cgpa-calc-frontend
+
 ## Grading System
 
 The grading system used by the CGPA calculator is as follows:
