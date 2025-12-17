@@ -1,184 +1,185 @@
+# ===============================
+# GPA & CGPA CALCULATOR
+# ===============================
+
 def calculate_gpa(course_units, grades):
     """
     Calculate the GPA given the course units and grades.
     """
+    if not course_units or not grades:
+        raise ValueError("Course units and grades cannot be empty")
+
+    if len(course_units) != len(grades):
+        raise ValueError("Course units and grades must be the same length")
+
+    if not all(0.0 <= g <= 5.0 for g in grades):
+        raise ValueError("Grades must be between 0.0 and 5.0")
+
     total_cu = sum(course_units)
-    weighted_points = 0
-    for i in range(len(course_units)):
-        weighted_points += course_units[i] * grades[i]
+    if total_cu == 0:
+        raise ValueError("Total course units cannot be zero")
+
+    weighted_points = sum(course_units[i] * grades[i] for i in range(len(course_units)))
     gpa = weighted_points / total_cu
     return round(gpa, 2)
 
+
 def calculate_cgpa_utme(level, sem, prev_cgpa, gpa):
-
     """
-    Calculate the CGPA of the Admission Mode "UTME" given the level, semester, previous CGPA, and current GPA.
+    Calculate CGPA for UTME students.
     """
-    cgpa = prev_cgpa #initialize cgpa to the previous cgpa
+    cgpa_map = {
+        (100, 1): lambda p, g: 0,
+        (100, 2): lambda p, g: (p + g) / 2,
 
-    if level == 100:
-        if sem == 1:
-            cgpa = 0
-        elif sem == 2:
-            cgpa = (prev_cgpa + gpa) / 2
-    elif level == 200:
-        if sem == 1:
-            cgpa = (prev_cgpa * 2 + gpa) / 3
-        elif sem == 2:
-            cgpa = (prev_cgpa * 3 + gpa) / 4
-    elif level == 300:
-        if sem == 1:
-            cgpa = (prev_cgpa * 4 + gpa)/5
-        elif sem == 2:
-            cgpa = (prev_cgpa * 5 + gpa)/6
-    elif level == 400:
-        if  sem == 1:
-            cgpa = (prev_cgpa * 6 + gpa)/7
-        elif sem == 2:
-            cgpa = (prev_cgpa * 7 + gpa)/8
-    elif level == 500:
-        if sem == 1:
-            cgpa = (prev_cgpa * 8 + gpa)/9
-        elif sem == 2:
-            cgpa = (prev_cgpa * 9 + gpa)/10
-    elif level == 600:
-        if sem == 1:
-            cgpa = (prev_cgpa * 10 + gpa)/11
-        elif sem == 2:
-            cgpa = (prev_cgpa * 11 + gpa)/12
-    return round(cgpa, 2)
+        (200, 1): lambda p, g: (p * 2 + g) / 3,
+        (200, 2): lambda p, g: (p * 3 + g) / 4,
+
+        (300, 1): lambda p, g: (p * 4 + g) / 5,
+        (300, 2): lambda p, g: (p * 5 + g) / 6,
+
+        (400, 1): lambda p, g: (p * 6 + g) / 7,
+        (400, 2): lambda p, g: (p * 7 + g) / 8,
+
+        (500, 1): lambda p, g: (p * 8 + g) / 9,
+        (500, 2): lambda p, g: (p * 9 + g) / 10,
+
+        (600, 1): lambda p, g: (p * 10 + g) / 11,
+        (600, 2): lambda p, g: (p * 11 + g) / 12,
+    }
+
+    key = (level, sem)
+    if key not in cgpa_map:
+        raise ValueError("Invalid level or semester for UTME")
+
+    return round(cgpa_map[key](prev_cgpa, gpa), 2)
+
 
 def calculate_cgpa_de(level, sem, prev_cgpa, gpa):
     """
-    Calculate the CGPA of the admission mode "DE" given the level, semester, previous CGPA, and current GPA.
+    Calculate CGPA for Direct Entry (DE) students.
     """
-    cgpa = prev_cgpa #initialize cgpa to the previous cgpa
-    if level == 200:
-        if sem == 1:
-            cgpa = 0
-        elif sem == 2:
-            cgpa = (prev_cgpa + gpa) / 2
-    elif level == 300:
-        if sem == 1:
-            cgpa = (prev_cgpa * 2 + gpa) / 3
-        elif sem == 2:
-            cgpa = (prev_cgpa * 3 + gpa) / 4
-    elif level == 400:
-        if sem == 1:
-            cgpa = (prev_cgpa * 4 + gpa)/5
-        elif sem == 2:
-            cgpa = (prev_cgpa * 5 + gpa)/6
-    elif level == 500:
-        if  sem == 1:
-            cgpa = (prev_cgpa * 6 + gpa)/7
-        elif sem == 2:
-            cgpa = (prev_cgpa * 7 + gpa)/8
-    elif level == 600:
-        if sem == 1:
-            cgpa = (prev_cgpa * 8 + gpa)/9
-        elif sem == 2:
-            cgpa = (prev_cgpa * 9 + gpa)/10            
-    return round(cgpa, 2)
+    cgpa_map = {
+        (200, 1): lambda p, g: 0,
+        (200, 2): lambda p, g: (p + g) / 2,
+
+        (300, 1): lambda p, g: (p * 2 + g) / 3,
+        (300, 2): lambda p, g: (p * 3 + g) / 4,
+
+        (400, 1): lambda p, g: (p * 4 + g) / 5,
+        (400, 2): lambda p, g: (p * 5 + g) / 6,
+
+        (500, 1): lambda p, g: (p * 6 + g) / 7,
+        (500, 2): lambda p, g: (p * 7 + g) / 8,
+
+        (600, 1): lambda p, g: (p * 8 + g) / 9,
+        (600, 2): lambda p, g: (p * 9 + g) / 10,
+    }
+
+    key = (level, sem)
+    if key not in cgpa_map:
+        raise ValueError("Invalid level or semester for DE")
+
+    return round(cgpa_map[key](prev_cgpa, gpa), 2)
+
 
 def generate_result(admission_mode, course_codes, course_units, grades, level, sem, prev_cgpa):
     """
-    Generate the student's result and display it in a table.
+    Generate and print student's GPA and CGPA.
     """
     gpa = calculate_gpa(course_units, grades)
-    print("GPA: ", gpa)
-    if admission_mode == 'UTME':
-    	cgpa = calculate_cgpa_utme(level, sem, prev_cgpa, gpa)
-    	print("CGPA: ", cgpa)
-    if admission_mode == 'DE':
-    	cgpa = calculate_cgpa_de(level, sem, prev_cgpa, gpa)
-    	print("CGPA: ", cgpa)
-    	    	
-	 
-# Acquire Student admission mode 
-try:
-	 admission_mode = input("'UTME or DE': ")
-	 if admission_mode not in ['UTME', 'DE']:
-	 	 raise ValueError("Invalid Input. Input one of 'UTME' or 'DE'")
-except ValueError as e:
-	 	 print(e)
-	 	 admission_mode = input("'UTME or DE': ")
-	 	 
-# acquire student's level
-try:
-    level = int(input("Level: "))
-    if admission_mode == 'UTME':
-	    if level < 100 or level > 600 or level not in (100, 200, 300, 400, 500, 600):
-	        raise ValueError("Invalid input. Please enter a level between 100 - 600.")
-except ValueError as e:
-	    print(e)
-	    level = int(input("Level: "))
-	    
-try:	    
-	if admission_mode == 'DE':
-	        if level < 200 or level > 600 or level not in (200, 300, 400, 500, 600):
-	        	raise ValueError("Invalid input. Please enter a level between 200 - 600.")
-except ValueError as e:
-	    print(e)
-	    level = int(input("Level: "))
+    print(f"GPA: {gpa}")
 
-# acquire student's semester
-try:
-    sem = int(input("Semester: "))
-    if sem > 2 or sem < 1:
-        raise ValueError("Invalid input. Please enter a valid semester between 1 and 2.")
-except ValueError as e:
-    print(e)
-    sem = int(input("Semester: "))
+    if admission_mode == "UTME":
+        cgpa = calculate_cgpa_utme(level, sem, prev_cgpa, gpa)
+    else:
+        cgpa = calculate_cgpa_de(level, sem, prev_cgpa, gpa)
 
-try:
-    prev_cgpa = float(input("Previous CGPA: "))
-    if prev_cgpa < 0.00 or prev_cgpa > 5.00:
-        raise ValueError("Invalid input. Please enter a valid CGPA between 0.00 and 5.00")
-except ValueError as e:
-    print(e)
-    prev_cgpa = float(input("Previous CGPA: "))
+    print(f"CGPA: {cgpa}")
 
-print("===========================")
 
-# acquire number of courses attempted
-while True:
-    try:
-        course_num = int(input("Courses Attempted: "))
-        break
-    except ValueError:
-        print("Invalid input. Please enter a valid number.")
+# ===============================
+# INPUT SECTION
+# ===============================
 
-print("===========================")
+def get_input(prompt, cast_func, condition=None, error_msg="Invalid input"):
+    while True:
+        try:
+            value = cast_func(input(prompt))
+            if condition and not condition(value):
+                raise ValueError
+            return value
+        except ValueError:
+            print(error_msg)
 
-# empty lists to accept course codes, course units, and grades
+
+admission_mode = input("Admission Mode (UTME or DE): ").upper()
+while admission_mode not in ("UTME", "DE"):
+    admission_mode = input("Admission Mode (UTME or DE): ").upper()
+
+level_range = (100, 200, 300, 400, 500, 600) if admission_mode == "UTME" else (200, 300, 400, 500, 600)
+
+level = get_input(
+    "Level: ",
+    int,
+    lambda x: x in level_range,
+    "Invalid level for admission mode",
+)
+
+sem = get_input(
+    "Semester (1 or 2): ",
+    int,
+    lambda x: x in (1, 2),
+    "Semester must be 1 or 2",
+)
+
+prev_cgpa = get_input(
+    "Previous CGPA: ",
+    float,
+    lambda x: 0.0 <= x <= 5.0,
+    "CGPA must be between 0.0 and 5.0",
+)
+
+course_num = get_input(
+    "Courses Attempted: ",
+    int,
+    lambda x: x > 0,
+    "Number of courses must be greater than 0",
+)
+
 course_codes = []
-cu = []
+course_units = []
 grades = []
 
-print("===========================")
+grade_map = {"A": 5.0, "B": 4.0, "C": 3.0, "D": 2.0, "E": 1.0, "F": 0.0}
 
-# loop to accept course codes, course units, and grades
 for i in range(course_num):
-    while True:
-        try:        
-            course_code = input("Course code for course {}: ".format(i+1)).upper()
-            course_unit = int(input("Course unit for course {}: ".format(i+1)))
-            course_grade = input("Grade for course {}: ".format(i+1)).upper()
-            if course_unit < 1 or course_unit > 6:
-                raise ValueError("Invalid input. Please enter a valid course unit between 1 and 6.")
-            if course_grade not in ['A', 'B', 'C', 'D', 'E', 'F']:
-                raise ValueError("Invalid input. Please enter a valid grade between A and F.")
-            break
-        except ValueError as e:
-            print(e)
-    course_codes.append(course_code)
-    cu.append(course_unit)
-    grades.append(course_grade)
+    print(f"\nCourse {i + 1}")
 
-# convert grades to numerical equivalents
-grades = [5.0 if grade == 'A' else 4.0 if grade == 'B' else 3.0 if grade == 'C' else 2.0 if grade == 'D' else 1.0 if grade == 'E' else 0.0 if grade == 'F' else None for grade in grades]
+    code = input("Course Code: ").upper()
+    unit = get_input(
+        "Course Unit (1–6): ",
+        int,
+        lambda x: 1 <= x <= 6,
+        "Course unit must be between 1 and 6",
+    )
 
-print("===========================")
+    grade_letter = input("Grade (A–F): ").upper()
+    while grade_letter not in grade_map:
+        grade_letter = input("Grade (A–F): ").upper()
 
-# generate student's result
-generate_result(admission_mode, course_codes, cu, grades, level, sem, prev_cgpa)
+    course_codes.append(code)
+    course_units.append(unit)
+    grades.append(grade_map[grade_letter])
+
+
+print("\n===========================")
+generate_result(
+    admission_mode,
+    course_codes,
+    course_units,
+    grades,
+    level,
+    sem,
+    prev_cgpa,
+)
